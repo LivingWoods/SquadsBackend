@@ -1,0 +1,20 @@
+﻿@using System.Security.Claims
+
+<MudMenu Icon="@Icons.Filled.AccountCircle" Color="Color.Secondary" Class="ms-2">
+    <MudMenuItem @onclick="LoginAsVisitor">
+        <MudText Color="@(FakeAuthenticationProvider?.Current.FindFirst(ClaimTypes.Name)?.Value == FakeAuthenticationProvider.Visitor.FindFirst(ClaimTypes.Name)?.Value ? Color.Tertiary : Color.Default)">
+            @(FakeAuthenticationProvider.Visitor.FindFirst(ClaimTypes.Name)?.Value)
+        </MudText>
+    </MudMenuItem>
+    <MudMenuItem @onclick="LoginAsTrainee">
+        <MudText Color="@(FakeAuthenticationProvider?.Current.FindFirst(ClaimTypes.Name)?.Value == FakeAuthenticationProvider.Trainee.FindFirst(ClaimTypes.Name)?.Value ? Color.Tertiary : Color.Default)">
+            @($"{FakeAuthenticationProvider.Trainee.FindFirst(ClaimTypes.Name)?.Value} ({FakeAuthenticationProvider.Trainee.FindFirst(ClaimTypes.Role)?.Value})")
+        </MudText>
+    </MudMenuItem>
+    <MudMenuItem @onclick="LoginAsTrainer">
+        <MudText Color="@(FakeAuthenticationProvider?.Current.FindFirst(ClaimTypes.Name)?.Value == FakeAuthenticationProvider.Trainer.FindFirst(ClaimTypes.Name)?.Value ? Color.Tertiary : Color.Default)">
+            @($"{FakeAuthenticationProvider.Trainer.FindFirst(ClaimTypes.Name)?.Value} ({FakeAuthenticationProvider.Trainer.FindFirst(ClaimTypes.Role)?.Value})")
+        </MudText>
+    </MudMenuItem>
+</MudMenu>
+

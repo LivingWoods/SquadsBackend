@@ -1,0 +1,11 @@
+﻿@inject NavigationManager NavigationManager
+
+<NavLink style="height: 20rem; width:20rem; cursor:pointer" @onclick="OnClick">
+    <MudPaper Style="@_styling" Class="h-100 w-100">
+        <MudCardContent Outlined="true" Class="h-100 d-flex justify-content-center align-items-center">
+            <MudText Typo="Typo.h4" Color="Color.Secondary" Style="padding-bottom: 5px; border-bottom: 2px solid;">
+                @NavCardText
+            </MudText>
+        </MudCardContent>
+    </MudPaper>
+</NavLink>

@@ -1,0 +1,95 @@
+﻿@page "/book"
+@using Squads.Shared.Sessions
+@using System.Globalization
+@inject IDialogService Dialog
+
+<PageTitle>SQUADS | Book a Session</PageTitle>
+
+
+<MudItem>
+    <ConfirmationSignUp />
+
+    <MudContainer>
+        <MudItem Style="font-size: 1.5rem; text-align: center;">
+
+            <MudButton @onclick="GetSessionsFromCurrentWeek" Style="@(!_nextWeekSelected ? "visibility:hidden;" : "")">
+                <MudIcon Size="Size.Medium" Icon="@Icons.Filled.ArrowBackIosNew" Style="text-align:center; vertical-align:central;"></MudIcon>
+            </MudButton>
+
+            @_beginning.DayOfWeek @_beginning.ToString("dd/MM") - @_ending.DayOfWeek @_ending.ToString("dd/MM/yyyy")
+
+            <MudButton @onclick="GetSessionsFromNextWeek" Style="@(_nextWeekSelected ? "visibility:hidden;" : "")">
+                <MudIcon Size="Size.Medium" Icon="@Icons.Filled.ArrowForwardIos" Style="text-align:center; vertical-align:central;"></MudIcon>
+            </MudButton>
+        </MudItem>
+    </MudContainer>
+
+    <div class="d-flex justify-content-center my-9 mx-auto" style="width:min-content; margin-auto">
+
+        @if (_sessions == null || _user == null)
+        {
+            <MudItem>Loading ...</MudItem>
+        }
+        else
+        {
+            <MudTable Hover Square Items="@_sessionsWithEmpty" Style="width:80vw; box-shadow: 10px 10px 13px 1px rgba(0,0,0,0.5);" HeaderClass="border border-0 shadow-none bg-light">
+                <ColGroup>
+                    <col style="width: 100px;" />
+                    <col style="width: 100px;" />
+                    <col style="width: 100px;" />
+                    <col />
+                    <col style="width: 200px;" />
+                    <col style="width: 200px;" />
+                    <col style="width: 200px;" />
+                </ColGroup>
+                <HeaderContent>
+                    <MudTh Class="border-dark border-bottom">Date</MudTh>
+                    <MudTh Class="border-dark border-bottom">From</MudTh>
+                    <MudTh Class="border-dark border-bottom">To</MudTh>
+                    <MudTh Class="border-dark border-bottom" />
+                    <MudTh Class="border-dark border-bottom">Training</MudTh>
+                    <MudTh Class="border-dark border-bottom">Instructor</MudTh>
+                    <MudTh Class="border-dark border-bottom">Actions</MudTh>
+                </HeaderContent>
+                <RowTemplate>
+                    <MudTd DataLabel="Date" style="@(context.StartDate.ToShortDateString() == DateTime.Now.ToShortDateString() ? "background-color:lightgray" : context.StartDate<DateTime.Now ? "pointer-events:none; color:gray" : "")">
+                        <div style="border-right: 1px solid;">
+                            <span style="display:block; font-weight:bold; font-size: 20px;">@context.StartDate.DayOfWeek.ToString().Substring(0,3).ToUpper()</span>
+                            <span style="display:block;" class="mx-auto">@context.StartDate.ToString("dd/MM")</span>
+                        </div>
+                    </MudTd>
+                    <MudTd style="@(context.StartDate.ToShortDateString() == DateTime.Now.ToShortDateString() ? "background-color:lightgray" : context.StartDate<DateTime.Now ? "pointer-events:none; color:gray" : "")" DataLabel="From">@(context.Id != -1 ? context.StartDate.ToString("HH:mm") : null)</MudTd>
+                        <MudTd style="@(context.StartDate.ToShortDateString() == DateTime.Now.ToShortDateString() ? "background-color:lightgray" : context.StartDate<DateTime.Now ? "pointer-events:none; color:gray" : "")" DataLabel="To">@(context.Id != -1 ? context.EndDate.ToString("HH:mm") : null)</MudTd>
+                        <MudTd style="@(context.StartDate.ToShortDateString() == DateTime.Now.ToShortDateString() ? "background-color:lightgray" : context.StartDate<DateTime.Now ? "pointer-events:none; color:gray" : "")">
+                            <div style="@(context.Id == -1 ? "text-align:center;" : "")" class="@(context.StartDate<DateTime.Now && context.StartDate.ToShortDateString() != DateTime.Now.ToShortDateString() && context.Id != -1 ? "d-none" : "")">
+                                <LabelSpotsLeft LeftOverSpots="@(context.AmountOfReservations)" />
+                            </div>
+                        </MudTd>
+                        <MudTd style="@(context.StartDate.ToShortDateString() == DateTime.Now.ToShortDateString() ? "background-color:lightgray" : context.StartDate<DateTime.Now ? "pointer-events:none; color:gray" : "")" DataLabel="Training">@context.SessionType</MudTd>
+                        <MudTd style="@(context.StartDate.ToShortDateString() == DateTime.Now.ToShortDateString() ? "background-color:lightgray" : context.StartDate<DateTime.Now ? "pointer-events:none; color:gray" : "")" DataLabel="Instructor">@context.Trainer</MudTd>
+                        <MudTd style="@(context.StartDate.ToShortDateString() == DateTime.Now.ToShortDateString() ? "background-color:lightgray" : context.StartDate<DateTime.Now ? "pointer-events:none; color:gray" : "")" DataLabel="Actions">
+                            @if (_user.Reservations.Select(x => x.SessionId).Contains(context.Id))
+                            {
+                                <ButtonComponent TextButton="CANCEL" OnClickFunction="(() => CancelReservation(context.Id))" />
+                            }
+                            else if (context.AmountOfReservations > 0 && context.CanBeReserved)
+                            {
+                                @if (_user.AmountOfPlannedReservation < 3)
+                                {
+                                    <ButtonComponent TextButton="SIGN UP" OnClickFunction="(() => OpenDialog(context))" />
+                                }
+                            }
+@*                            else
+                            {
+                                @if (context.EndDate >= DateTime.Now && _reservations.Count() < 3)
+                                {
+                                    <ButtonComponent TextButton="JOIN WAITLIST" />
+                                }
+                            }*@
+                        </MudTd>
+                </RowTemplate>
+            </MudTable>
+        }
+    </div>
+</MudItem>
+

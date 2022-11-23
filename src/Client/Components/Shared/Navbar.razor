@@ -1,0 +1,80 @@
+﻿@inject NavigationManager NavigationManager
+
+<MudItem Style="overflow: hidden;">
+    <MudAppBar Color="Color.Primary" Style="height: 6rem;">
+        <div style="width:8rem;">
+            @if (_trainerRoute)
+            {
+                <MudImage Src="img/SquadsTrainerNavLogo.png" Alt="Squads Logo" Class="my-auto" Height="60" />
+            }
+            else
+            {
+                <MudImage Src="img/SquadsNavLogo.svg" Alt="Squads Logo" Class="my-auto" Height="40" />
+            }
+        </div>
+        <MudSpacer />
+        <MudText Typo="Typo.h4">
+            @(_title)
+        </MudText>
+        <MudSpacer />
+        <div style="width:8rem;">
+            <MudIconButton Size="Size.Large" Icon="@_icon" Color="Color.Secondary" @onclick="() => ToggleDrawer()" Style="float:right;" Class="@(_trainerRoute ? "d-none" : null)" />
+        </div>
+    </MudAppBar>
+
+    <MudDrawer @bind-Open="@_open" Elevation="1" Variant="@DrawerVariant.Persistent" Width="100%" Height="100vh" Color="Color.Primary" Class="@(_trainerRoute ? "d-none" : null)" >
+        <MudItem Class="d-flex">
+            <MudStack Class="ms-5 py-5 align-self-end" Style="border-left: 10px solid white; width:10%;">
+                <MudTooltip Text="Change account type" Arrow="true" Placement="Placement.Right">
+                    <SwitchAccountMenu />
+                </MudTooltip>
+                <MudTooltip Text="Facebook" Arrow="true" Placement="Placement.Right">
+                    <MudLink Href="https://www.facebook.com/squadsaalst/" Target="_blank">
+                        <MudIcon Class="ms-5" Icon="@Icons.Custom.Brands.Facebook" Color="Color.Secondary" />
+                    </MudLink>
+                </MudTooltip>
+                <MudTooltip Text="Instagram" Arrow="true" Placement="Placement.Right">
+                    <MudLink Href="https://www.instagram.com/squads_aalst/" Target="_blank">
+                        <MudIcon Class="ms-5" Icon="@Icons.Custom.Brands.Instagram" Color="Color.Secondary" />
+                    </MudLink>
+                </MudTooltip>
+                <MudTooltip Text="WhatsApp" Arrow="true" Placement="Placement.Right">
+                    <MudLink Href="https://wa.me/+32476490970" Target="_blank">
+                        <MudIcon Class="ms-5" Icon="@Icons.Custom.Brands.WhatsApp" Color="Color.Secondary" />
+                    </MudLink>
+                </MudTooltip>
+                <MudTooltip Text="Contact us" Arrow="true" Placement="Placement.Right">
+                    <MudLink Href="mailto:michiel.vanherreweghe@outlook.com">
+                        <MudIcon Class="ms-5" Icon="@Icons.Filled.Info" Color="Color.Secondary" />
+                    </MudLink>
+                </MudTooltip>
+                <MudTooltip Text="Albert Liénartstraat 25, 9300 Aalst" Arrow="true" Placement="Placement.Right">
+                    <MudLink Href="https://goo.gl/maps/GBHfQhMgwFc1V1HV9" Target="_blank">
+                        <MudIcon Class="ms-5" Icon="@Icons.Filled.LocationOn" Color="Color.Secondary" />
+                    </MudLink>
+                </MudTooltip>
+            </MudStack>
+
+            <div class="d-flex flex-column justify-content-center align-items-center vw-100 vh-100">
+                <MudStack Spacing="16">
+                    <MudStack Spacing="16" Row="true">
+                        <NavCard NavCardText="Reservations" NavCardImageURL="img/Squads_Trainee_Reservations.jpg" NavCardHrefURL="/my-reservations" IsOutlined="true" />
+                        <NavCard NavCardText="My Health" NavCardImageURL="img/Squads_Trainee_MyHealth.jpg" NavCardHrefURL="/my-health" IsOutlined="true" />
+                    </MudStack>
+                    <MudStack Spacing="16" Row="true">
+                        <NavCard NavCardText="My Exercises" NavCardImageURL="img/Squads_Trainee_MyExercises.jpg" NavCardHrefURL="/my-exercises" IsOutlined="true" />
+                        <NavCard NavCardText="My Account" NavCardImageURL="img/Squads_Trainee_MyAccount.jpeg" NavCardHrefURL="/account" IsOutlined="true" />
+                    </MudStack>
+                </MudStack>
+            </div>
+
+            <div style="width:10%;" />
+        </MudItem>
+    </MudDrawer>
+</MudItem>                        
+
+<style>
+    .mud-toolbar {
+        height: 6rem !important;
+    }
+</style>

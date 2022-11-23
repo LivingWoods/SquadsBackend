@@ -1,0 +1,23 @@
+﻿.button {
+    border: none;
+    padding: 0.5rem 0.7rem;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 0.9rem;
+    margin: 5px 2px;
+    transition-duration: 0.4s;
+    cursor: pointer;
+    box-shadow: 3px 3px 15px #888888;
+}
+
+.button-extra {
+    background-color: white;
+    color: black;
+    border: 3px solid black;
+}
+
+.button:hover {
+    background-color: black;
+    color: white;
+}

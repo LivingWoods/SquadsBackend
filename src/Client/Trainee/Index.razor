@@ -1,0 +1,24 @@
+﻿@inject NavigationManager NavigationManager
+@page "/"
+
+<PageTitle>SQUADS | Homepage</PageTitle>
+
+<Navbar />
+
+<div class="trainee-landing-hero d-flex flex-column align-items-center justify-content-center">
+    <MudImage Src="img/Squads_Trainee_Landing_Logo.svg" Alt="Squads Landing Logo" Class="mb-5" />
+    <MudButton Variant="Variant.Outlined" Color=Color.Secondary Class="mt-5 rounded-0 book-button"
+           Style="width: 200px; height: 70px; font-size: 45px;" OnClick="NavigateToBookSession">
+    BOOK
+</MudButton>
+</div>
+
+
+
+
+@code {
+    void NavigateToBookSession()
+    {
+        NavigationManager.NavigateTo("/book");
+    }
+}

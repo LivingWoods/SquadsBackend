@@ -1,0 +1,24 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Grpc.AspNetCore.Web" Version="2.50.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="6.0.9" />
+    <PackageReference Include="protobuf-net.Grpc.AspNetCore" Version="1.0.179" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Client\Squads.Client.csproj" />
+    <ProjectReference Include="..\Shared\Squads.Shared.csproj" />
+    <ProjectReference Include="..\Squads.Fakers\Squads.Fakers.csproj" />
+    <ProjectReference Include="..\Squads.Persistence\Squads.Persistence.csproj" />
+    <ProjectReference Include="..\Squads.Services\Squads.Services.csproj" />
+  </ItemGroup>
+
+
+</Project>

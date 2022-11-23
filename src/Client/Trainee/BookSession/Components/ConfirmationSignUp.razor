@@ -1,0 +1,21 @@
+﻿@inject ISnackbar Snackbar
+<MudDialog Style="font-size: 1rem;">
+    <TitleContent>
+        <MudText Typo="Typo.h4">
+            Session confirmation
+        </MudText>
+    </TitleContent>
+    <DialogContent>
+        <strong>Date: </strong> @CurrentSession.StartDate.ToString("dd/MM/yyyy") <br />
+        <strong>Time: </strong> @CurrentSession.StartDate.ToString("HH:mm") - @CurrentSession.EndDate.ToString("HH:mm")<br />
+        <strong>Traning: </strong> @CurrentSession.SessionType <br />
+        <strong>Instructor: </strong> @CurrentSession.Trainer<br />
+        <MudItem Class="mt-5">You can <strong>book</strong> a session up to <strong>one hour</strong> before the start.</MudItem>
+        <MudItem>You can <strong>cancel</strong> a session up to <strong>two hours</strong> before the start.</MudItem>
+    </DialogContent>
+
+    <DialogActions>
+        <ButtonComponent TextButton="CANCEL" OnClickFunction="Cancel" />
+        <ButtonComponent TextButton="CONFIRM" OnClickFunction="Submit" />
+    </DialogActions>
+</MudDialog>

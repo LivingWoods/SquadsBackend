@@ -1,0 +1,27 @@
+﻿<SubscriptionCard IsActive=@(ExpiryDate != null && ExpiryDate >= DateTime.UtcNow)>
+	<Front>
+		<h3 style="position: absolute; width: 100%; text-align: center; top: 50%; transform: translateY(-50%); color:white; margin:0;">
+			Subscription Card
+		</h3>
+		<p style="position: absolute; text-align: right; bottom: 30px; right: 34px; color:white; margin-bottom: 0;">
+			Valid till: 
+			<b style="font-weight: 500;">
+				@((ExpiryDate != null && ExpiryDate >= DateTime.UtcNow)?
+				ExpiryDate.Value.ToString("dd/MM/yyyy"):
+				"No subscription")
+			</b>
+		</p>
+		<MudIcon Style="position: absolute; top: 30px; right: 34px;" Class="ms-8" Icon="@Icons.Filled.History" Color="Color.Secondary" Size="Size.Medium" />
+	</Front>
+	<Back>
+
+		<div style="justify-content:flex-start; column-gap:30px; font-weight:bold; flex: 1 0 50%; display: flex; flex-wrap: wrap; flex-direction: row; position: absolute; width: 75%; top: 30px; left: 34px; color:white;">
+			<p style="margin: 0;">1. 05/10/2022</p>
+			<p style="margin: 0;">2. 06/10/2022</p>
+			<p style="margin: 0;">3. 07/10/2022</p>
+			<p style="margin: 0;">4. 10/10/2022</p>
+		</div>
+
+		<MudIcon Style="position: absolute; top: 30px; right: 34px;" Class="ms-8" Icon="@Icons.Filled.KeyboardReturn" Color="Color.Secondary" Size="Size.Medium" />
+	</Back>
+</SubscriptionCard>

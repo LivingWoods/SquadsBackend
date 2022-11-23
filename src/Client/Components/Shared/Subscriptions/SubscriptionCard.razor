@@ -1,0 +1,12 @@
+﻿<div style="cursor:pointer; position: relative;" class="@(Animated) @(IsActive? "activated" : "inactive")" Animated=@Animated @onclick="(() => {ChangeInformation();})">
+	<MudImage Src="/img/Card.png" Style="width: 100%; height: 100%; position: relative;" />
+	<MudImage Src="/img/SquadsNavLogo.svg" Style="position: absolute; width: 70px; bottom: 33px; left: 30px; opacity: 0.6;" />
+	@if (!ShowBack)
+	{
+		@Front
+	}
+	else
+	{
+		@Back
+	}
+</div>

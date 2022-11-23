@@ -1,0 +1,14 @@
+﻿@inherits LayoutComponentBase
+@inject NavigationManager NavigationManager
+
+<div class="page">
+    <MudThemeProvider Theme="_squadsTheme" />
+    <MudDialogProvider />
+    <MudSnackbarProvider />
+    <Sidepanel />
+
+    <Navbar />
+    <main style="background-color: #F4F4F4; min-height: 100vh; @(NavigationManager.ToBaseRelativePath(NavigationManager.Uri).ToString() != "" ? "padding-top:8rem" : null)">
+        @Body
+    </main>
+</div>
