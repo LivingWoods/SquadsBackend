@@ -7,8 +7,6 @@
 
 
 <MudItem>
-    <ConfirmationSignUp />
-
     <MudContainer>
         <MudItem Style="font-size: 1.5rem; text-align: center;">
 
@@ -68,7 +66,7 @@
                         <MudTd style="@(context.StartDate.ToShortDateString() == DateTime.Now.ToShortDateString() ? "background-color:lightgray" : context.StartDate<DateTime.Now ? "pointer-events:none; color:gray" : "")" DataLabel="Training">@context.SessionType</MudTd>
                         <MudTd style="@(context.StartDate.ToShortDateString() == DateTime.Now.ToShortDateString() ? "background-color:lightgray" : context.StartDate<DateTime.Now ? "pointer-events:none; color:gray" : "")" DataLabel="Instructor">@context.Trainer</MudTd>
                         <MudTd style="@(context.StartDate.ToShortDateString() == DateTime.Now.ToShortDateString() ? "background-color:lightgray" : context.StartDate<DateTime.Now ? "pointer-events:none; color:gray" : "")" DataLabel="Actions">
-                            @if (_user.Reservations.Select(x => x.SessionId).Contains(context.Id))
+                            @if (plannedReservations.Select(x => x.SessionId).Contains(context.Id))
                             {
                                 <ButtonComponent TextButton="CANCEL" OnClickFunction="(() => CancelReservation(context.Id))" />
                             }

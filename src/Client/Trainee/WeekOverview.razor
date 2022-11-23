@@ -1,0 +1,38 @@
+﻿@page "/test"
+
+<h3>Week Overview</h3>
+
+@if (weekItems is null)
+{
+    <p>Loading...</p>
+}
+else
+{
+    <table>
+
+        @foreach (var weekItem in weekItems)
+        {
+            <tr>
+                <td>@weekItem.StartDate</td>
+                <td>@weekItem.EndDate</td>
+                <td>@weekItem.AmountOfReservations</td>
+                <td>@weekItem.Type</td>
+                <td>@weekItem.Instructor</td>
+                <td>
+                    @if (weekItem.CanSignUp)
+                    {
+                        <button @onclick="() => ReserveSession(weekItem.SessionId)">Reserve</button>
+                    }
+                    @if (weekItem.CanJoinWaitList)
+                    {
+                        <span>Join WaitList</span>
+                    }
+                    @if (weekItem.CanCancel)
+                    {
+                        <span>Cancel</span>
+                    }
+                </td>
+            </tr>
+        }
+    </table>
+}

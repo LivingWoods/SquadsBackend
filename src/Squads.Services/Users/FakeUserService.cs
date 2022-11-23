@@ -5,6 +5,7 @@ using Squads.Shared.Users;
 using Squads.Domain.Users;
 using Squads.Persistence;
 using Microsoft.EntityFrameworkCore;
+using FluentDateTime;
 
 namespace Squads.Services.Users;
 
@@ -100,6 +101,23 @@ public class FakeUserService : IUserService
         };
     }
 
+    public async Task<UserReply.PlannedReservations> GetPlannedReservations(UserRequest.IdRequest request)
+    {
+        var plannedReservations = await _dbContext.Reservations.Where(x => x.UserId == request.UserId)
+                               .Where(x => x.Session.StartDate.Date >= DateTime.UtcNow.Date)
+                               .Select(x => new ReservationDto.Index
+                               {
+                                   ReservationId = x.Id,
+                                   SessionId = x.SessionId,
+                               }).ToListAsync();
+
+        return new UserReply.PlannedReservations
+        {
+            Reservations = plannedReservations
+        };
+
+    }
+
     public async Task<UserReply.DetailReply> GetUserByUserId(UserRequest.IdRequest request)
     {
         var query = await _dbContext.Users.Include(u => u.Reservations).ThenInclude(r => r.Session).AsQueryable().ToListAsync();
@@ -144,6 +162,49 @@ public class FakeUserService : IUserService
                 })
             }
         };
+    }
+
+    public async Task<UserReply.WeekOverview> GetWeekOverview(UserRequest.WeekOverview request)
+    {
+        var begginingOfWeek = request.StartDate.FirstDayOfWeek();
+        var endOfWeek = request.StartDate.EndOfWeek();
+
+
+
+        var sessions = await _dbContext.Sessions
+                                          .Include(x => x.Trainer)
+                                          .Include(x => x.Reservations)
+                                          .ThenInclude(x => x.User).ThenInclude(x => x.Tokens)
+                                          .Where(x => x.StartDate.Date >= begginingOfWeek
+                                                   && x.EndDate.Date <= endOfWeek)
+                                          .AsNoTracking()
+                                          .ToListAsync();
+
+        User user = await _dbContext.Users
+                            .Include(x => x.Tokens)
+                            .Include(x => x.Reservations.Where(x => x.Session.StartDate >= DateTime.UtcNow.Date))
+                                .ThenInclude(x => x.Session)
+                            .AsNoTracking()
+                            .SingleAsync(x => x.Id == request.UserId);
+
+        var reply = new UserReply.WeekOverview();
+
+        foreach (var session in sessions)
+        {
+            reply.WeekItems.Add(new UserDto.WeekItem
+            {
+                AmountOfReservations = session.AmountOfTotalReservations,
+                Instructor = session.Trainer.FirstName,
+                StartDate = session.StartDate,
+                EndDate = session.EndDate,
+                Type = session.SessionType.ToString(),
+                CanCancel = user.CanCancelSession(session),
+                CanSignUp = user.CanReserveSession(session),
+                SessionId = session.Id,
+            });
+        }
+
+        return reply;
     }
 
     public async Task<UserReply.IdReply> ReserveSession(UserRequest.ReservationRequest request)

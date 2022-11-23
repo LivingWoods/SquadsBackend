@@ -17,7 +17,7 @@ public partial class NavCard
         _styling = $"background-image: url('{NavCardImageURL}'); background-size: cover; background-repeat: no-repeat; {(IsOutlined ? "border: 2px solid; border-color:white;" : "")}";
     }
 
-    private async void OnClick()
+    private void OnClick()
     {
         NavigationManager.NavigateTo(NavCardHrefURL);
     }

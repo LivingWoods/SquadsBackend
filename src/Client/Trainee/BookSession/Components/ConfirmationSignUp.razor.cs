@@ -14,7 +14,7 @@ public partial class ConfirmationSignUp
     [Parameter] public Color Color { get; set; }
     [Parameter] public EventCallback StateTest { get; set; }
     [Parameter] public EventCallback<int> ReserveSession { get; set; }
-    [Inject] FakeAuthenticationProvider? FakeAuthenticationProvider { get; set; }
+    [Inject] FakeAuthenticationProvider FakeAuthenticationProvider { get; set; } = default!;
 
 
 

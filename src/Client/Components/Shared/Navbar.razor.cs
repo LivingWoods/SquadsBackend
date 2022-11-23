@@ -10,9 +10,9 @@ public partial class Navbar
     private bool _open = false;
     private string _icon = Icons.Material.Filled.Menu;
     private bool _trainerRoute = false;
-    private string _title;
+    private string _title = string.Empty;
 
-    protected override async Task OnInitializedAsync()
+    protected override void OnInitialized()
     {
         _trainerRoute = NavigationManager.ToBaseRelativePath(NavigationManager.Uri).ToString().Contains("trainer");
         SetTitle();
@@ -67,7 +67,7 @@ public partial class Navbar
         _icon = _open ? Icons.Filled.Close : Icons.Material.Filled.Menu;
     }
 
-    private void HandleLocationChanged(object sender, LocationChangedEventArgs e)
+    private void HandleLocationChanged(object? sender, LocationChangedEventArgs e)
     {
         _open = false;
         _icon = Icons.Material.Filled.Menu;

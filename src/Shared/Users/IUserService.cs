@@ -18,4 +18,6 @@ namespace Squads.Shared.Users;
 
     /* DELETE */
     [OperationContract] Task DeleteUserByUserId(UserRequest.IdRequest request);
+    [OperationContract] Task<UserReply.PlannedReservations> GetPlannedReservations(UserRequest.IdRequest request);
+    [OperationContract] Task<UserReply.WeekOverview> GetWeekOverview(UserRequest.WeekOverview request);
 }

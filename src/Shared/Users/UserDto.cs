@@ -47,4 +47,18 @@ public abstract class UserDto
         [DataMember(Order = 12)] public bool HasSignedHouseRules { get; set; }
         [DataMember(Order = 13)] public bool IsTrainer { get; set; }
     }
+
+    [DataContract]
+    public class WeekItem
+    {
+        [DataMember(Order = 1)] public DateTime StartDate { get; set; } = default!;
+        [DataMember(Order = 2)] public DateTime EndDate { get; set; } = default!;
+        [DataMember(Order = 3)] public int AmountOfReservations { get; set; } = default!;
+        [DataMember(Order = 4)] public string Type { get; set; } = default!;
+        [DataMember(Order = 5)] public string Instructor { get; set; } = default!;
+        [DataMember(Order = 6)] public bool CanCancel { get; set; } = default!;
+        [DataMember(Order = 7)] public bool CanSignUp { get; set; } = default!;
+        [DataMember(Order = 8)] public bool CanJoinWaitList { get; set; } = default!;
+        [DataMember(Order = 9)] public int SessionId { get; set; } = default!;
+    }
 }

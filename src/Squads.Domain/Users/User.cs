@@ -39,7 +39,7 @@ public class User : Entity
     /// <summary>
     /// Returns only the reservations that lie in the future list as an immutable read only list
     /// </summary>
-    public IReadOnlyList<Reservation> PlannedReservations => _reservations.FindAll(r => r.Session.StartDate > DateTime.UtcNow).AsReadOnly();
+    public IReadOnlyList<Reservation> PlannedReservations => _reservations.FindAll(r => r.Session?.StartDate > DateTime.UtcNow).ToList();
     /// <summary>
     /// Returns only the reservations that lie in the past list as an immutable read only list
     /// </summary>
@@ -119,18 +119,34 @@ public class User : Entity
     /// <param name="session">The session for which a new reservation is created</param>
     public void ReserveSession(Session session)
     {
-        if (AmountOfPlannedReservations < 3)
+        if (!CanReserveSession(session))
         {
-            if (HasActiveSubscription)
-            {
-                _reservations.Add(new Reservation(this, session));
-            }
-            else if (AmountOfAvailableTokens > 0)
-            {
-                _reservations.Add(new Reservation(this, session));
-                FirstAvailableToken?.UseToken();
-            }
+            throw new Exception("Cannot be reserved...");
         }
+
+        if (HasActiveSubscription)
+        {
+            _reservations.Add(new Reservation(this, session));
+        }
+        else if (AmountOfAvailableTokens > 0)
+        {
+            _reservations.Add(new Reservation(this, session));
+            FirstAvailableToken?.UseToken();
+        }
+    }
+
+    public bool CanReserveSession(Session session)
+    {
+        return (AmountOfAvailableTokens > 0 || HasActiveSubscription)
+            && AmountOfPlannedReservations < 3
+            && !Reservations.Any(x => x.Session == session)
+            && session.CanBeReserved;
+    }
+
+    public bool CanCancelSession(Session session)
+    {
+        return Reservations.Any(x => x.Session == session)
+            && session.ReservationCanBeCanceled;
     }
 
     public void CancelReservation(int reservationId)

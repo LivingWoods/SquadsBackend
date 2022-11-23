@@ -20,4 +20,11 @@ public abstract class UserRequest
         [DataMember(Order = 2)] public int UserId { get; set; }
         [DataMember(Order = 3)] public int SessionId { get; set; }
     }
+
+    [DataContract]
+    public class WeekOverview
+    {
+        [DataMember(Order = 1)] public int UserId { get; set; }
+        [DataMember(Order = 2)] public DateTime StartDate { get; set; } = DateTime.UtcNow;
+    }
 }

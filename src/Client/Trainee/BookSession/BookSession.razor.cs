@@ -20,7 +20,7 @@ public partial class BookSession
     private IEnumerable<SessionDto.Index>? _sessions { get; set; }
     private List<SessionDto.Index>? _sessionsWithEmpty { get; set; }
     private UserDto.Detail _user { get; set; } = default!;
-
+    private List<ReservationDto.Index> plannedReservations;
     private DateTime _beginning = DateTime.Now.StartOfWeek(DayOfWeek.Monday);
     private DateTime _ending = DateTime.Now.AddDays(7).StartOfWeek(DayOfWeek.Monday).AddMilliseconds(-1);
     private bool _nextWeekSelected = false;
@@ -29,9 +29,10 @@ public partial class BookSession
 
     protected override async Task OnInitializedAsync()
     {
-        await GetSessionsFromCurrentWeek();
-
         int userId = Convert.ToInt32(AuthProvider?.Current.FindFirst("Id")?.Value);
+        await GetSessionsFromCurrentWeek();
+        var response = await UserService.GetPlannedReservations(new UserRequest.IdRequest { UserId = userId});
+        plannedReservations = response.Reservations.ToList();
 
         UserReply.DetailReply reply = await UserService.GetUserByUserId(new UserRequest.IdRequest
         {
@@ -101,13 +102,12 @@ public partial class BookSession
 
         var parameterCurrentSession = new DialogParameters();
         parameterCurrentSession.Add("CurrentSession", CurrentSession);
-        parameterCurrentSession.Add("StateTest", EventCallback.Factory.Create(this, StateTest));
         parameterCurrentSession.Add("ReserveSession", EventCallback.Factory.Create<int>(this, ReserveSession));
 
         Dialog.Show<ConfirmationSignUp>("Session confirmation", parameterCurrentSession, options);
     }
 
-    private async void CancelReservation(int sessionId)
+    private async Task CancelReservation(int sessionId)
     {
         //reservationdto.index res = _reservations.where(x => x.session.id == sessionid).first();
         //await reservationservice.deletereservationasync(res.id);
@@ -123,7 +123,7 @@ public partial class BookSession
         });
     }
 
-    private async void ReserveSession(int sessionId)
+    private async Task ReserveSession(int sessionId)
     {
         var reserveReply = await UserService.ReserveSession(new UserRequest.ReservationRequest
         {
@@ -134,24 +134,8 @@ public partial class BookSession
 
         int userId = Convert.ToInt32(AuthProvider?.Current.FindFirst("Id")?.Value);
 
-        UserReply.DetailReply reply = await UserService.GetUserByUserId(new UserRequest.IdRequest
-        {
-            UserId = reserveReply.UserId
-        });
-
-        _user = reply.User;
-
-        StateHasChanged();
-    }
-
-    //public async void UpdateReservations()
-    //{
-    //    _reservations = await ReservationService.GetFutureReservationsOfTrainee(1);
-    //}
-
-    public void StateTest()
-    {
-        StateHasChanged();
+        var response = await UserService.GetPlannedReservations(new UserRequest.IdRequest { UserId = userId });
+        plannedReservations = response.Reservations.ToList();
     }
 }
 
